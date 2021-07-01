@@ -205,5 +205,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.name === 'update-setting') {
     bm.setOptions(request.options)
     browser.runtime.closeOptionsPage()
+  } else if (request.name === 'show-msg') {
+    bm.showMsg(request.msg, true)
   }
 })
