@@ -30,6 +30,7 @@
     "bookmarks",
     "webRequest",
     "storage",
+    "notifications",
     "https://*.github.com/",
     "https://*.githubusercontent.com/"
   ]
