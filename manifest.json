@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "Bookmark Syncer",
+  "version": "1.0.0",
+  "author": "hishengs@gmail.com",
+  "description": "A Chrome Extension for Bookmark Sync",
+  "homepage_url": "https://github.com/Hishengs/bookmark-syncer",
+  "icons": {
+    "16": "icon/16.png",
+    "32": "icon/32.png",
+    "48": "icon/48.png",
+    "128": "icon/128.png"
+  },
+  "background": {
+    "page": "src/background.html",
+    "persistent": true
+  },
+  "content_scripts": [],
+  "browser_action": {
+    "default_icon": "icon/48.png",
+    "default_title": "A Chrome Extension for Bookmark Sync",
+    "default_popup": "src/popup.html"
+  },
+  "options_ui": {
+    "page": "src/options.html",
+    "chrome_style": false,
+    "open_in_tab": false
+  },
+  "permissions": [
+    "bookmarks",
+    "webRequest",
+    "storage",
+    "https://*.github.com/",
+    "https://*.githubusercontent.com/"
+  ]
+}

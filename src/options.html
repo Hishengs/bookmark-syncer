@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>options</title>
+  <style>
+    .options-wrapper {
+      padding: 10px 20px;
+    }
+    .option {
+      margin-bottom: 10px;
+      height: 40px;
+      line-height: 40px;
+    }
+    label {
+      display: inline-block;
+      width: 80px;
+    }
+    input {
+      margin-left: 10px;
+      padding: 5px 10px;
+      border: 1px solid #bbb;
+      outline: none;
+      border-radius: 2px;
+      width: 220px;
+    }
+    span.save-btn {
+      color: #333;
+      text-decoration: none;
+      padding: 5px 12px;
+      display: inline-block;
+      border: 1px solid #666;
+      border-radius: 2px;
+      width: 100px;
+      text-align: center;
+      margin: 10px auto;
+      height: 26px;
+      line-height: 26px;
+    }
+    span.save-btn:hover {
+      background-color: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <div class="options-wrapper">
+    <div class="option">
+      <label for="">Github Token</label><input type="text" name="github_token">
+    </div>
+    <div class="option">
+      <label for="">Gist ID</label><input type="text" name="gist_id">
+    </div>
+    <div class="option">
+      <label for="">File Name</label><input type="text" name="file_name">
+    </div>
+    <div style="text-align: center;">
+      <span class="save-btn">保存</span>
+    </div>
+  </div>
+  <script src="./options.js"></script>
+</body>
+</html>
