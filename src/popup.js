@@ -2,7 +2,6 @@ const browser = chrome;
 
 window.addEventListener('click', e => {
   if (e.target && e.target.className === 'bs-btn') {
-    // console.log(e.target);
     clickItem(e.target.getAttribute('name'));
   }
 })
