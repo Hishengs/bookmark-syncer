@@ -7,12 +7,15 @@ import {
 
 const browser = chrome;
 
+const inChrome = /chrome/i.test(window.navigator.userAgent);
+
 async function showMsg (msg, alert = false) {
   const msgId = await notification.open(msg);
+  console.log('showMsg', msgId, chrome.runtime.lastError)
   setTimeout(() => {
     notification.close(msgId);
   }, 5000);
-  alert && alert(msg);
+  if (inChrome || alert) window.alert(msg);
 }
 
 class BookmarkManage {
@@ -28,6 +31,7 @@ class BookmarkManage {
   }
 
   async setOptions (options = {}) {
+    this.options = options;
     return await storage.setItem('options', JSON.stringify(options));
   }
 
@@ -65,7 +69,7 @@ class BookmarkManage {
     const confirm = window.confirm('确定要从远端（github）同步书签？本地书签将被完全覆盖！')
     if (!confirm) return;
     const remote = await this.getRemoteBookmark();
-    if (!this.isBookmarkAvailable(remote)) return;
+    if (!this.isBookmarkAvailable(remote, '远端书签记录为空，请先同步本地书签至远端')) return;
     const local = await this.getLocalBookmark();
     if (!this.isBookmarkAvailable(local)) return;
     // 只操作【书签栏】的书签，不处理【其他书签】
@@ -79,8 +83,10 @@ class BookmarkManage {
     showMsg('远端书签已同步至本地');
   }
 
-  isBookmarkAvailable (bm) {
-    return Boolean(bm && bm.bookmarks && bm.bookmarks.length && bm.bookmarks[0].children.length);
+  isBookmarkAvailable (bm, msg) {
+    const valid = Boolean(bm && bm.bookmarks && bm.bookmarks.length && bm.bookmarks[0].children.length);
+    if (!valid && msg) showMsg(msg);
+    return valid;
   }
 
   async clearBookmarks (bookmark) {
@@ -103,6 +109,9 @@ class BookmarkManage {
     showMsg('本地书签已同步至远端');
   }
 }
+
+// storage.setItem('gist', null);
+// storage.setItem('options', null);
 
 const bm = new BookmarkManage();
 bm.init();

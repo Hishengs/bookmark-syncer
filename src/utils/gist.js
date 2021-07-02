@@ -5,6 +5,40 @@ const GITHUB_URL = 'https://api.github.com';
 const GIST_DESC = 'my gist for bookmark sync';
 const FILE_NAME = 'bookmark';
 
+async function onCatch (err, throwError = false) {
+  const id = await notification.open(err.message);
+  console.log('>>> onCatch', err.message);
+  setTimeout(() => {
+    notification.close(id);
+  }, 5000);
+  if (throwError) throw new Error(err);
+}
+
+function setInterceptors (axios) {
+  axios.interceptors.request.use(function (config) {
+    // console.log('>>> interceptors.request', config);
+    return config;
+  }, function (error) {
+    // console.log('>>> interceptors.request.err', error);
+    onCatch(error);
+    return Promise.reject(error);
+  });
+  axios.interceptors.response.use(function (response) {
+    // console.log('>>> interceptors.response', response);
+    return response;
+  }, function (error) {
+    // console.log('>>> interceptors.response.err', error);
+    let err = error;
+    const res = error.response || {}
+    if (res.data && res.data.message && res.data.message === 'Bad credentials') {
+      err = new Error('Bad credentials, github token 已失效，请重新配置');
+      err.stack = error.stack;
+    }
+    onCatch(err);
+    return Promise.reject(err);
+  });
+}
+
 export default {
   axios: null,
   options: null,
@@ -22,6 +56,7 @@ export default {
           'Accept': 'application/vnd.github.v3+json',
         }
       });
+      setInterceptors(this.axios);
       return this.axios;
     });
   },
@@ -55,6 +90,13 @@ export default {
     storage.setItem('gist', JSON.stringify(gist));
   },
   async createGist () {
+    // 先查询 gist 是否已存在
+    const gists = await this.fetchAll();
+    const gist = gists.find(g => g.files[FILE_NAME]);
+    if (gist) {
+      this.updateGist(gist);
+      return gist;
+    }
     const axios = await this.getAxios();
     // see: https://docs.github.com/en/rest/reference/gists#create-a-gist
     return await axios.post('/gists', {
@@ -87,7 +129,7 @@ export default {
       const gist = res.data;
       this.updateGist(gist);
       return gist;
-    });
+    }).catch(this.onNotFound);
   },
   async fetch () {
     const gist = await this.getGist();
@@ -106,7 +148,7 @@ export default {
         return fileContent ? JSON.parse(fileContent) : null;
       }
       return null;
-    });
+    }).catch(this.onNotFound);
   },
   async fetchAll () {
     const axios = await this.getAxios();
@@ -115,5 +157,12 @@ export default {
       if (res.status !== 200) throw new Error(res.statusText);
       return res.data;
     });
-  }
+  },
+  onNotFound (err) {
+    if (err.status === 404) {
+      this.gist = null;
+      storage.setItem('gist', null);
+    }
+    throw new Error(err);
+  },
 }

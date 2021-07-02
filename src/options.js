@@ -1,7 +1,7 @@
 const browser = chrome;
 
 function init () {
-  browser.runtime.sendMessage({ name: 'get-options' }, (options) => {
+  browser.runtime.sendMessage({ name: 'get-options' }, (options = {}) => {
     // console.log('get-options',options)
     let inputs = document.querySelectorAll('.options-wrapper input');
     inputs = Array.from(inputs || []);
