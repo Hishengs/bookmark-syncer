@@ -1,211 +1,140 @@
-const browser = chrome
+import {
+  storage,
+  bookmark as bookmarkUtils,
+  notification,
+  gist
+} from './utils/index.js';
 
-function merge (source, target) {
-  return Object.assign({}, source, target)
+const browser = chrome;
+
+async function showMsg (msg, alert = false) {
+  const msgId = await notification.open(msg);
+  setTimeout(() => {
+    notification.close(msgId);
+  }, 5000);
+  alert && alert(msg);
 }
 
 class BookmarkManage {
-  axios = window.axios
   options = null
 
   async init () {
-    this.options = await this.getOptions()
-    if (!this.options) return
-    const { github_token } = this.options
-    this.axios = axios.create({
-      baseURL: 'https://api.github.com',
-      timeout: 6000,
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Authorization': `token ${github_token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    })
+    this.options = await this.getOptions();
+  }
+
+  async getOptions () {
+    const options = await storage.getItem('options');
+    return options && JSON.parse(options);
+  }
+
+  async setOptions (options = {}) {
+    return await storage.setItem('options', JSON.stringify(options));
   }
 
   async getLocalBookmark () {
-    return new Promise(resolve => {
-      browser.bookmarks.getTree((bookmarks) => {
-        resolve({
-          bookmarks
-        });
-      });
-    })
+    const bookmarks = await bookmarkUtils.getTree();
+    return { bookmarks };
   }
 
   async getRemoteBookmark () {
-    if (!this.options) return null
-    const { gist_id, file_name } = this.options
-    const res = await this.axios.get(`/gists/${gist_id}`)
-    if (res && res.data) {
-      const gistFile = res.data.files[file_name]
-      let fileContent
-      if (gistFile.truncated) {
-        fileContent = await this.axios.get(gistFile.raw_url, { responseType: 'blob' }).then(resp => resp.data.text())
-      } else {
-        fileContent = gistFile.content
-      }
-      return fileContent ? JSON.parse(fileContent) : null
+    if (!(await this.checkOptions())) return null;
+    try {
+      return await gist.fetch();
+    } catch (e) {
+      showMsg(e.message);
+      return null;
     }
   }
 
-  updateLocalBookmark () {
-    //
+  // local => remote
+  async updateRemoteBookmark (bookmarks) {
+    if (!(await this.checkOptions())) return;
+    await gist.update(JSON.stringify(bookmarks, null, 2));
   }
 
-  updateRemoteBookmark (bookmarks) {
-    if (!this.options) return
-    const { gist_id, file_name } = this.options
-    const data = JSON.stringify({
-      files: {
-        [file_name]: {
-          content: JSON.stringify(bookmarks)
-        }
-      },
-      description: file_name
-    })
-    this.axios.patch(`https://api.github.com/gists/${gist_id}`, data)
-      .then(resp => resp.data)
-      .then(data => {
-        console.log('updateRemoteBookmark.data', data)
-      })
-      .catch(err => {
-        console.log('updateRemoteBookmark.err', err)
-      })
-  }
-
-  getOptions () {
-    return new Promise((resolve, reject) => {
-      browser.storage.sync.get('options', (res) => {
-        if (browser.runtime.lastError) {
-          reject(browser.runtime.lastError);
-        } else {
-          const options = res && res['options']
-          resolve(options && JSON.parse(options));
-        }
-      });
-    })
-  }
-
-  setOptions (options = {}) {
-    return new Promise((resolve, reject) => {
-      browser.storage.sync.set({
-        'options': JSON.stringify(options)
-      }, () => {
-        if (browser.runtime.lastError) {
-          reject(browser.runtime.lastError);
-        } else {
-          this.options = options
-          resolve();
-        }
-      });
-    })
-  }
-
-  async check () {
+  async checkOptions () {
     if (!this.options) {
-      await this.showMsg("update your setting first", true);
-      // browser.runtime.openOptionsPage();
+      await showMsg("配置为空，请先更新你的配置信息");
       return false;
     }
     return true;
   }
 
   async syncFromRemote () {
-    if (!(await this.check())) return;
+    if (!(await this.checkOptions())) return;
     const confirm = window.confirm('确定要从远端（github）同步书签？本地书签将被完全覆盖！')
     if (!confirm) return;
-    const remote = await this.getRemoteBookmark()
-    if (!remote || !remote.bookmarks || !remote.bookmarks.length || !remote.bookmarks[0].children.length) return;
-    const local = await this.getLocalBookmark()
-    if (!local || !local.bookmarks || !local.bookmarks.length || !local.bookmarks[0].children.length) return;
-    const remote_bookmark = remote.bookmarks[0].children[0];
-    const local_bookmark = local.bookmarks[0].children[0];
+    const remote = await this.getRemoteBookmark();
+    if (!this.isBookmarkAvailable(remote)) return;
+    const local = await this.getLocalBookmark();
+    if (!this.isBookmarkAvailable(local)) return;
+    // 只操作【书签栏】的书签，不处理【其他书签】
+    const remoteBookmark = remote.bookmarks[0].children[0];
+    const localBookmark = local.bookmarks[0].children[0];
     // clear
-    await this.clearBookmarks(local_bookmark);
+    await this.clearBookmarks(localBookmark);
     // create
-    await this.createBookmarks(remote_bookmark);
-    console.log('syncFromRemote', { remote, local, remote_bookmark, local_bookmark })
+    await this.createBookmarks(remoteBookmark);
+    // console.log('syncFromRemote', { remote, local, remoteBookmark, localBookmark });
+    showMsg('远端书签已同步至本地');
+  }
+
+  isBookmarkAvailable (bm) {
+    return Boolean(bm && bm.bookmarks && bm.bookmarks.length && bm.bookmarks[0].children.length);
   }
 
   async clearBookmarks (bookmark) {
-    return new Promise((resolve, reject) => {
-      const promises = bookmark.children.map(node => {
-        return new Promise((rs, rj) => {
-          try {
-            console.log('尝试移除书签', node);
-            rs();
-            // browser.bookmarks[node.children ? 'removeTree' : 'remove'](node.id, rs);
-          } catch (e) {
-            rj(e);
-          }
-        })
-      });
-      return Promise.all(promises).then(resolve).catch(reject);
-    });
+    // await bookmark.children.map(node => console.log('移除书签', node));
+    await bookmark.children.map(node => bookmarkUtils.remove(node));
   }
 
   async createBookmarks (bookmark) {
-    async function createNode (node, parentId) {
-      await new Promise(resolve => {
-        const { title, url, children } = node;
-        console.log('尝试创建书签', { parentId, title, url });
-        if (children && children.length) {
-          resolve(Promise.all(children.map(n => createNode(n, (parseInt(parentId) + 1) + ''))))
-        } else resolve();
-        /* browser.bookmarks.create({ parentId, title, url }, (newNode) => {
-          if (children && children.length) {
-            resolve(Promise.all(children.map(n => createNode(n, newNode.id))))
-          } else resolve();
-        }) */
-      })
-    }
-    return bookmark.children.map(node => {
-      return createNode(node, '1')
-    });
+    // await bookmark.children.map(node => console.log('创建书签', node, bookmark.id));
+    await bookmark.children.map(node => bookmarkUtils.create(node, bookmark.id));
   }
 
   async syncToRemote () {
-    if (!(await this.check())) return;
+    if (!(await this.checkOptions())) return;
     const confirm = window.confirm('确定要同步书签到远端（github）？远端书签将被完全覆盖！')
     if (!confirm) return;
-    const local = await this.getLocalBookmark()
-    await this.updateRemoteBookmark(local)
-    console.log('syncToRemote', local)
-  }
-
-  async showMsg (msg, alert = false) {
-    await new Promise((resolve, reject) => {
-      browser.notifications.create({
-        type: "basic",
-        iconUrl: '../icon/32.png',
-        title: '提示',
-        message: msg
-      }, id => {
-        console.log('notifications', id)
-        alert && window.alert(msg)
-        if (id) resolve()
-        else reject()
-      });
-    })
+    const local = await this.getLocalBookmark();
+    await this.updateRemoteBookmark(local);
+    // console.log('本地书签已同步至远端', local);
+    showMsg('本地书签已同步至远端');
   }
 }
 
-const bm = new BookmarkManage()
-bm.init()
+const bm = new BookmarkManage();
+bm.init();
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('background:', request)
-  if (request.name === 'sync-from-remote') {
-    bm.syncFromRemote()
-  } else if (request.name === 'sync-to-remote') {
-    bm.syncToRemote()
-  } else if (request.name === 'setting') {
-    browser.runtime.openOptionsPage()
-  } else if (request.name === 'update-setting') {
-    bm.setOptions(request.options)
-    browser.runtime.closeOptionsPage()
-  } else if (request.name === 'show-msg') {
-    bm.showMsg(request.msg, true)
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  // console.log('background:', request);
+  try {
+    switch (request.name) {
+      case 'sync-from-remote':
+        bm.syncFromRemote();
+        break;
+      case 'sync-to-remote':
+        bm.syncToRemote();
+        break;
+      case 'show-options':
+        browser.runtime.openOptionsPage();
+        break;
+      case 'update-options':
+        await bm.setOptions(request.options);
+        showMsg('配置已更新');
+        break;
+      case 'get-options':
+        sendResponse(bm.options);
+        break;
+      case 'show-msg':
+        showMsg(request.msg);
+        break;
+      case 'help':
+        window.open('https://github.com/hishengs/bookmark-syncer');
+        break;
+    }
+  } catch (e) {
+    showMsg(e.message);
   }
-})
+});
