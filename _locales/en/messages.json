@@ -58,5 +58,25 @@
   "invalid_access_token": {
     "message": "Bad credentials, access token is invalid, please update your setting",
     "description": ""
+  },
+  "clear_local": {
+    "message": "清空本地书签",
+    "description": ""
+  },
+  "clear_local_confirm": {
+    "message": "Are you sure to clear local bookmarks?",
+    "description": ""
+  },
+  "clear_success": {
+    "message": "Clear Success",
+    "description": ""
+  },
+  "local_empty_confirm": {
+    "message": "Your local bookmarks seems empty, still upload and override remote?",
+    "description": ""
+  },
+  "remote_empty_confirm": {
+    "message": "Remote bookmarks seems empty, still download and override local's?",
+    "description": ""
   }
 }

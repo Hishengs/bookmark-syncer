@@ -58,5 +58,25 @@
   "invalid_access_token": {
     "message": "Bad credentials, access token 已失效，请重新配置",
     "description": ""
+  },
+  "clear_local": {
+    "message": "清空本地书签",
+    "description": ""
+  },
+  "clear_local_confirm": {
+    "message": "你确定要清空本地书签吗？",
+    "description": ""
+  },
+  "clear_success": {
+    "message": "清除成功",
+    "description": ""
+  },
+  "local_empty_confirm": {
+    "message": "本地书签似乎为空，仍然要上传并覆盖掉远端的书签吗？",
+    "description": ""
+  },
+  "remote_empty_confirm": {
+    "message": "远端书签似乎为空？仍然下载并覆盖掉本地的书签吗？",
+    "description": ""
   }
 }

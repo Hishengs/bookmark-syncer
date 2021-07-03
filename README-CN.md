@@ -8,7 +8,7 @@
 - 跨设备同步
 - 无服务端，无需担心数据安全和隐私
 - 同时支持 github 或者 gitee 存储
-- 支持 chrome/edge 等浏览器
+- 支持 chrome/edge/qq/360 等浏览器
 
 > 使用 Github 的 [gists](https://gist.github.com/) 或者 [Gitee](https://gitee.com/) 的 gists 服务来存储你的书签数据
 

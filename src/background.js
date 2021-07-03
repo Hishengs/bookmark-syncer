@@ -31,10 +31,15 @@ class BookmarkManage {
   }
 
   async syncFromRemote () {
-    const confirm = window.confirm(i18n.get('SYNC_FROM_REMOTE_WRN'))
+    let confirm = window.confirm(i18n.get('SYNC_FROM_REMOTE_WRN'));
     if (!confirm) return;
     const remote = await this.getRemoteBookmark();
     if (!this.isBookmarkAvailable(remote, i18n.get('REMOTE_BOOKMARK_EMPTY_TIP'))) return;
+    // check if empty
+    if (this.isEmpty(remote)) {
+      confirm = window.confirm(i18n.get('remote_empty_confirm'));
+      if (!confirm) return;
+    }
     const local = await this.getLocalBookmark();
     if (!this.isBookmarkAvailable(local)) return;
     // 只操作【书签栏】的书签，不处理【其他书签】
@@ -54,6 +59,12 @@ class BookmarkManage {
     return valid;
   }
 
+  isEmpty (bm) {
+    if (!this.isBookmarkAvailable(bm)) return;
+    const bookmark = bm && bm.bookmarks && bm.bookmarks.length && bm.bookmarks[0].children[0];
+    return !(bookmark && bookmark.children.length);
+  }
+
   async clearBookmarks (bookmark) {
     // await bookmark.children.map(node => console.log('移除书签', node));
     await bookmark.children.map(node => bookmarkUtils.remove(node));
@@ -65,11 +76,27 @@ class BookmarkManage {
   }
 
   async syncToRemote () {
-    const confirm = window.confirm(i18n.get('SYNC_TO_REMOTE_WRN'));
+    let confirm = window.confirm(i18n.get('SYNC_TO_REMOTE_WRN'));
     if (!confirm) return;
     const local = await this.getLocalBookmark();
+    // check if empty
+    if (this.isEmpty(local)) {
+      confirm = window.confirm(i18n.get('local_empty_confirm'));
+      if (!confirm) return;
+    }
     await this.updateRemoteBookmark(local);
     showMsg(i18n.get('SYNC_TO_REMOTE_SUCCESS'));
+  }
+
+  async clearLocal () {
+    const confirm = window.confirm(i18n.get('clear_local_confirm'));
+    if (!confirm) return;
+    const local = await this.getLocalBookmark();
+    if (!this.isBookmarkAvailable(local)) return;
+    const localBookmark = local.bookmarks[0].children[0];
+    // clear
+    await this.clearBookmarks(localBookmark);
+    showMsg(i18n.get('clear_success'));
   }
 }
 
@@ -84,6 +111,9 @@ browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         break;
       case 'sync-to-remote':
         await bm.syncToRemote();
+        break;
+      case 'clear-local':
+        await bm.clearLocal();
         break;
       case 'show-options':
         browser.runtime.openOptionsPage();
