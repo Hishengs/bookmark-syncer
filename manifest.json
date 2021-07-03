@@ -34,5 +34,11 @@
     "https://*.github.com/",
     "https://*.githubusercontent.com/"
   ],
-  "default_locale": "en"
+  "default_locale": "en",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "bookmark-syncer@hisheng.net"
+    }
+  },
+  "update_URL": "https://edge.microsoft.com/extensionwebstorebase/v1/crx"
 }

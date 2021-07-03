@@ -8,6 +8,7 @@ A Chrome Extension for Bookmark Sync. [中文文档](./README-CN.md)
 - across devices
 - no server, no worry about data security and privacy
 - support github gists and gitee gists both
+- support chrome/edge, etc.
 
 > [gists](https://gist.github.com/) of Github / gists of [Gitee](https://gitee.com/) is used to store your bookmarks data (private)
 

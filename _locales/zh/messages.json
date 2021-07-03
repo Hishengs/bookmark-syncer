@@ -12,11 +12,11 @@
     "description": ""
   },
   "SYNC_TO_REMOTE_WRN": {
-    "message": "确定要同步书签到远端（github）？远端书签将被完全覆盖！",
+    "message": "确定要同步书签到远端（gists）？远端书签将被完全覆盖！",
     "description": ""
   },
   "SYNC_FROM_REMOTE_WRN": {
-    "message": "确定要从远端（github）同步书签？本地书签将被完全覆盖！",
+    "message": "确定要从远端（gists）同步书签？本地书签将被完全覆盖！",
     "description": ""
   },
   "SYNC_FROM_REMOTE_SUCCESS": {
@@ -48,7 +48,7 @@
     "description": ""
   },
   "help": {
-    "message": "帮助",
+    "message": "帮助/收藏",
     "description": ""
   },
   "tip": {
