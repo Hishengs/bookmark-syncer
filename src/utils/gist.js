@@ -2,10 +2,7 @@ import storage from './storage.js';
 import options from './options.js';
 import notification from './notification.js';
 import * as i18n from './i18n.js';
-
-const GITHUB_URL = 'https://api.github.com';
-const GIST_DESC = 'my gist for bookmark sync';
-const FILE_NAME = 'bookmark';
+import { GITHUB_URL, GITEE_URL, GIST_DESC, FILE_NAME } from './constant.js';
 
 async function onCatch (err, throwError = false) {
   const id = await notification.open(err.message);
@@ -34,7 +31,7 @@ function setInterceptors (axios) {
     const res = error.response || {};
     if (res.data && res.data.message && res.data.message === 'Bad credentials') {
       options.clear();
-      err = new Error(i18n.get('invalid_github_token'));
+      err = new Error(i18n.get('invalid_access_token'));
       err.stack = error.stack;
     }
     onCatch(err);
@@ -42,20 +39,20 @@ function setInterceptors (axios) {
   });
 }
 
-export default {
+const Gist = {
   axios: null,
   gist: null,
   async getAxios () {
     if (this.axios) return this.axios;
     return await options.fetch().then(options => {
-      const { github_token } = options;
+      const { store, access_token } = options;
       this.axios = window.axios.create({
-        baseURL: GITHUB_URL,
+        baseURL: store === 'github' ? GITHUB_URL : GITEE_URL,
         timeout: 10000,
         headers: {
           'Content-Type': 'application/json;charset=UTF-8',
-          'Authorization': `token ${github_token}`,
-          'Accept': 'application/vnd.github.v3+json',
+          'Authorization': `token ${access_token}`,
+          'Accept': store === 'github' ? 'application/vnd.github.v3+json' : 'application/json',
         }
       });
       setInterceptors(this.axios);
@@ -75,7 +72,7 @@ export default {
   async setGist (gist) {
     if (!gist) {
       this.gist = null;
-      await storage.setItem('gist', null);
+      await storage.removeItem('gist');
       return;
     }
     // for small size
@@ -112,15 +109,16 @@ export default {
   async update (content) {
     const gist = await this.getGist();
     const axios = await this.getAxios();
+    const { store } = await options.fetch();
     // see: https://docs.github.com/en/rest/reference/gists#update-a-gist
-    const data = JSON.stringify({
+    const data = {
       files: {
         [FILE_NAME]: {
-          content,
+          content: store === 'gitee' ? encodeURIComponent(content) : content,
         }
       },
-    }); 
-    return await axios.patch(`/gists/${gist.id}`, data)
+    };
+    return await axios.patch(`/gists/${gist.id}`, JSON.stringify(data))
       .then(async (res) => {
         if (res.status !== 200) throw new Error(res.statusText);
         const gist = res.data;
@@ -132,6 +130,7 @@ export default {
   async fetch () {
     const gist = await this.getGist();
     const axios = await this.getAxios();
+    const { store } = await options.fetch();
     // see: https://docs.github.com/en/rest/reference/gists#get-a-gist
     return await axios.get(`/gists/${gist.id}`)
       .then(async (res) => {
@@ -144,7 +143,7 @@ export default {
           } else {
             fileContent = gistFile.content;
           }
-          return fileContent ? JSON.parse(fileContent) : null;
+          return fileContent ? JSON.parse(store === 'gitee' ? decodeURIComponent(fileContent) : fileContent) : null;
         }
         return null;
       })
@@ -164,4 +163,13 @@ export default {
       throw new Error(i18n.get('GIST_NOT_FOUND'));
     } else throw new Error(err);
   },
-}
+  async reset () {
+    this.axios = null;
+    this.gist = null;
+    await storage.removeItem('gist');
+  }
+};
+
+options.onChange(Gist.reset.bind(Gist));
+
+export default Gist;

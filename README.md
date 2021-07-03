@@ -1,5 +1,5 @@
 # bookmark-syncer
-A Chrome Extension for Bookmark Sync
+A Chrome Extension for Bookmark Sync. [中文文档](./README-CN.md)
 
 ## features
 
@@ -7,8 +7,9 @@ A Chrome Extension for Bookmark Sync
 - sync bookmarks to remote
 - across devices
 - no server, no worry about data security and privacy
+- support github gists and gitee gists both
 
-> [gists](https://gist.github.com/) is used to store your bookmarks data (private)
+> [gists](https://gist.github.com/) of Github / gists of [Gitee](https://gitee.com/) is used to store your bookmarks data (private)
 
 ## get started
 

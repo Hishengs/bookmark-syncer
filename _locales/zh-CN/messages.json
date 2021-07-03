@@ -55,8 +55,8 @@
     "message": "提示",
     "description": ""
   },
-  "invalid_github_token": {
-    "message": "Bad credentials, github token 已失效，请重新配置",
+  "invalid_access_token": {
+    "message": "Bad credentials, access token 已失效，请重新配置",
     "description": ""
   }
 }

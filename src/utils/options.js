@@ -6,6 +6,7 @@ const OPTIONS_NAME = 'options';
 
 const OPTS = {
   options: null,
+  changeCbs: [],
   async fetch (throwError = true) {
     if (this.options) return this.options;
     let options = await storage.getItem(OPTIONS_NAME);
@@ -21,15 +22,21 @@ const OPTS = {
   },
   async update (options) {
     if (!options) return;
+    if (this.options && JSON.stringify(options) !== JSON.stringify(this.options)) {
+      this.changeCbs.forEach(cb => cb && cb());
+    }
     this.options = options;
     return await storage.setItem(OPTIONS_NAME, JSON.stringify(options));
   },
   async clear () {
     this.options = null;
-    await storage.setItem(OPTIONS_NAME, null);
+    await storage.removeItem(OPTIONS_NAME);
+  },
+  onChange (cb) {
+    if (typeof cb === 'function') this.changeCbs.push(cb);
   }
 };
 
-OPTS.fetch();
+OPTS.fetch().catch(err => {});
 
 export default OPTS;

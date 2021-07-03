@@ -1,10 +1,4 @@
-import {
-  bookmark as bookmarkUtils,
-  notification,
-  gist,
-  options,
-  i18n,
-} from './utils/index.js';
+import { bookmark as bookmarkUtils, notification, gist, options, i18n } from './utils/index.js';
 import { HOME_PAGE } from './utils/constant.js';
 
 const browser = chrome;
@@ -17,7 +11,7 @@ async function showMsg (msg, alert = false) {
   setTimeout(() => {
     notification.close(msgId);
   }, 5000);
-  if (/* inChrome ||  */alert) window.alert(msg);
+  if (inChrome || alert) window.alert(msg);
 }
 
 class BookmarkManage {

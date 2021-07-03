@@ -25,5 +25,16 @@ export default {
         }
       });
     })
-  }
+  },
+  async removeItem (key) {
+    return new Promise((resolve, reject) => {
+      browser.storage.sync.remove(key, () =>{
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  },
 };

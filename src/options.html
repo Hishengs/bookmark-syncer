@@ -6,56 +6,62 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>options</title>
   <style>
-    .options-wrapper {
+    #options-wrapper {
       padding: 10px 20px;
+      max-width: 400px;
+      border: 1px solid #eee;
+      border-radius: 2px;
     }
     .option {
       margin-bottom: 10px;
       height: 40px;
-      line-height: 40px;
+      display: flex;
+      align-items: center;
     }
     label {
       display: inline-block;
       width: 80px;
+      margin-right: 10px;
     }
-    input {
-      margin-left: 10px;
+    input[type="text"] {
       padding: 8px 10px;
       border: 1px solid #666;
       outline: none;
       border-radius: 4px;
-      width: 220px;
+      width: 230px;
     }
-    span.save-btn {
-      color: #333;
-      text-decoration: none;
+    input[type="radio"] {
+      margin-right: 10px;
+      margin-top: 0;
+    }
+    div.save-btn {
+      color: #fff;
       padding: 5px 12px;
-      display: inline-block;
-      border: 1px solid #666;
       border-radius: 4px;
-      width: 100px;
       text-align: center;
       margin: 10px auto;
       height: 26px;
       line-height: 26px;
-    }
-    span.save-btn:hover {
-      color: #fff;
       background-color: #389e0d;
-      border-color: #fff;
+    }
+    div.save-btn:hover {
+      opacity: 0.8;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <div class="options-wrapper">
+  <form id="options-wrapper">
     <div class="option">
-      <label for="">Github Token</label><input type="text" name="github_token">
+      <label for="">Store Service</label>
+      <input type="radio" name="store" value="github" id="github" checked="checked"><label for="github">Github</label>
+      <input type="radio" name="store" value="gitee" id="gitee"><label for="gitee">Gitee</label>
     </div>
-    <div style="text-align: center;">
-      <span class="save-btn" data-i18n="save">保存</span>
+    <div class="option">
+      <label for="">Access Token</label><input type="text" name="access_token">
     </div>
-  </div>
+    <div class="save-btn" data-i18n="save">Save</div>
+  </form>
   <script src="./options.js" type="module"></script>
 </body>
 </html>

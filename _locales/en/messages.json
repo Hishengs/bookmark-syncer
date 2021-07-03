@@ -55,8 +55,8 @@
     "message": "Tip",
     "description": ""
   },
-  "invalid_github_token": {
-    "message": "Bad credentials, github token is invalid, please update your setting",
+  "invalid_access_token": {
+    "message": "Bad credentials, access token is invalid, please update your setting",
     "description": ""
   }
 }

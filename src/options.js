@@ -7,23 +7,29 @@ function init () {
 }
 
 function setOptions (options = {}) {
-  // console.log('get-options',options)
-  let inputs = document.querySelectorAll('.options-wrapper input');
+  const opts = Object.assign({}, options);
+  let inputs = document.querySelectorAll('#options-wrapper input');
   inputs = Array.from(inputs || []);
   inputs.forEach(input => {
-    input.value = options[input.name] || '';
+    if (input.type === 'radio') {
+      input.checked = input.value === opts[input.name];
+      return;
+    }
+    input.value = opts[input.name] || '';
   });
 }
 
 function save () {
-  let inputs = document.querySelectorAll('.options-wrapper input');
-  inputs = Array.from(inputs || []);
+  const form = document.getElementById('options-wrapper');
+  const formData = new FormData(form);
+  const entries = formData.entries();
   let emptyField = '';
-  const options = inputs.reduce((acc, input) => {
-    if (input) {
-      acc[input.name] = input.value;
-      if (!input.value) emptyField = input.name;
+  const options = Array.from(entries).reduce((acc, [name, value]) => {
+    if (!value) {
+      emptyField = name;
+      return acc;
     }
+    acc[name] = value;
     return acc;
   }, {});
   if (emptyField) {
