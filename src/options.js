@@ -1,3 +1,5 @@
+import { seti18n } from './utils/i18n.js';
+
 const browser = chrome;
 
 function init () {
@@ -38,3 +40,5 @@ window.addEventListener('click', e => {
     save();
   }
 });
+
+seti18n();

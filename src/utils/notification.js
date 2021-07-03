@@ -1,8 +1,10 @@
+import * as i18n from './i18n.js';
+
 const browser = chrome;
 
 export default {
   async open (args) {
-    let opt = { title: '提示', message: '' };
+    let opt = { title: i18n.get('tip'), message: '' };
     if (typeof args === 'string') {
       opt.message = args;
     }

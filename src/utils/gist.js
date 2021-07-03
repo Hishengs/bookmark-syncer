@@ -1,7 +1,7 @@
 import storage from './storage.js';
 import options from './options.js';
 import notification from './notification.js';
-import { GIST_NOT_FOUND } from './constant.js';
+import * as i18n from './i18n.js';
 
 const GITHUB_URL = 'https://api.github.com';
 const GIST_DESC = 'my gist for bookmark sync';
@@ -34,7 +34,7 @@ function setInterceptors (axios) {
     const res = error.response || {};
     if (res.data && res.data.message && res.data.message === 'Bad credentials') {
       options.clear();
-      err = new Error('Bad credentials, github token 已失效，请重新配置');
+      err = new Error(i18n.get('invalid_github_token'));
       err.stack = error.stack;
     }
     onCatch(err);
@@ -161,7 +161,7 @@ export default {
   async ifNotFound (err) {
     if (err.status === 404) {
       await this.setGist(null);
-      throw new Error(GIST_NOT_FOUND);
+      throw new Error(i18n.get('GIST_NOT_FOUND'));
     } else throw new Error(err);
   },
 }

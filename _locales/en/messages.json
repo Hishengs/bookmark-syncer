@@ -1,0 +1,62 @@
+{
+  "GIST_NOT_FOUND": {
+    "message": "gist not exists",
+    "description": ""
+  },
+  "OPTIONS_UPDATED": {
+    "message": "setting updated",
+    "description": ""
+  },
+  "NO_OPTIONS_MSG": {
+    "message": "no setting, please update your setting first",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_WRN": {
+    "message": "Are your sure to sync your bookmarks to remote(gists), which will be overrided entirely?",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_WRN": {
+    "message": "Are your sure to sync your bookmarks from remote(gists), local will be overrided entirely?",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_SUCCESS": {
+    "message": "remote bookmarks have been downloaded to local",
+    "description": ""
+  },
+  "REMOTE_BOOKMARK_EMPTY_TIP": {
+    "message": "no remote bookmarks, please sync your local bookmarks to remote first",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_SUCCESS": {
+    "message": "local bookmarks have been uploaded to remote",
+    "description": ""
+  },
+  "save": {
+    "message": "Save",
+    "description": ""
+  },
+  "sync_from_remote": {
+    "message": "Sync from Remote",
+    "description": ""
+  },
+  "sync_to_remote": {
+    "message": "Sync to Remote",
+    "description": ""
+  },
+  "setting": {
+    "message": "Setting",
+    "description": ""
+  },
+  "help": {
+    "message": "Help",
+    "description": ""
+  },
+  "tip": {
+    "message": "Tip",
+    "description": ""
+  },
+  "invalid_github_token": {
+    "message": "Bad credentials, github token is invalid, please update your setting",
+    "description": ""
+  }
+}

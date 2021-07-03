@@ -1,0 +1,62 @@
+{
+  "GIST_NOT_FOUND": {
+    "message": "gist 不存在",
+    "description": ""
+  },
+  "OPTIONS_UPDATED": {
+    "message": "配置已更新",
+    "description": ""
+  },
+  "NO_OPTIONS_MSG": {
+    "message": "配置为空，请先更新你的配置信息",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_WRN": {
+    "message": "确定要同步书签到远端（github）？远端书签将被完全覆盖！",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_WRN": {
+    "message": "确定要从远端（github）同步书签？本地书签将被完全覆盖！",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_SUCCESS": {
+    "message": "远端书签已同步至本地",
+    "description": ""
+  },
+  "REMOTE_BOOKMARK_EMPTY_TIP": {
+    "message": "远端书签记录为空，请先同步本地书签至远端",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_SUCCESS": {
+    "message": "本地书签已同步至远端",
+    "description": ""
+  },
+  "save": {
+    "message": "保存",
+    "description": ""
+  },
+  "sync_from_remote": {
+    "message": "同步书签到本地",
+    "description": ""
+  },
+  "sync_to_remote": {
+    "message": "同步书签到远端",
+    "description": ""
+  },
+  "setting": {
+    "message": "设置",
+    "description": ""
+  },
+  "help": {
+    "message": "帮助",
+    "description": ""
+  },
+  "tip": {
+    "message": "提示",
+    "description": ""
+  },
+  "invalid_github_token": {
+    "message": "Bad credentials, github token 已失效，请重新配置",
+    "description": ""
+  }
+}

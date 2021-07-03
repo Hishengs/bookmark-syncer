@@ -3,16 +3,9 @@ import {
   notification,
   gist,
   options,
+  i18n,
 } from './utils/index.js';
-import {
-  HOME_PAGE,
-  OPTIONS_UPDATED,
-  SYNC_FROM_REMOTE_WRN,
-  SYNC_TO_REMOTE_WRN,
-  SYNC_FROM_REMOTE_SUCCESS,
-  SYNC_TO_REMOTE_SUCCESS,
-  REMOTE_BOOKMARK_EMPTY_TIP
-} from './utils/constant.js';
+import { HOME_PAGE } from './utils/constant.js';
 
 const browser = chrome;
 
@@ -44,10 +37,10 @@ class BookmarkManage {
   }
 
   async syncFromRemote () {
-    const confirm = window.confirm(SYNC_FROM_REMOTE_WRN)
+    const confirm = window.confirm(i18n.get('SYNC_FROM_REMOTE_WRN'))
     if (!confirm) return;
     const remote = await this.getRemoteBookmark();
-    if (!this.isBookmarkAvailable(remote, REMOTE_BOOKMARK_EMPTY_TIP)) return;
+    if (!this.isBookmarkAvailable(remote, i18n.get('REMOTE_BOOKMARK_EMPTY_TIP'))) return;
     const local = await this.getLocalBookmark();
     if (!this.isBookmarkAvailable(local)) return;
     // 只操作【书签栏】的书签，不处理【其他书签】
@@ -58,7 +51,7 @@ class BookmarkManage {
     // create
     await this.createBookmarks(remoteBookmark);
     // console.log('syncFromRemote', { remote, local, remoteBookmark, localBookmark });
-    showMsg(SYNC_FROM_REMOTE_SUCCESS);
+    showMsg(i18n.get('SYNC_FROM_REMOTE_SUCCESS'));
   }
 
   isBookmarkAvailable (bm, msg) {
@@ -78,11 +71,11 @@ class BookmarkManage {
   }
 
   async syncToRemote () {
-    const confirm = window.confirm(SYNC_TO_REMOTE_WRN);
+    const confirm = window.confirm(i18n.get('SYNC_TO_REMOTE_WRN'));
     if (!confirm) return;
     const local = await this.getLocalBookmark();
     await this.updateRemoteBookmark(local);
-    showMsg(SYNC_TO_REMOTE_SUCCESS);
+    showMsg(i18n.get('SYNC_TO_REMOTE_SUCCESS'));
   }
 }
 
@@ -103,7 +96,7 @@ browser.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
         break;
       case 'update-options':
         await options.update(request.options);
-        showMsg(OPTIONS_UPDATED);
+        showMsg(i18n.get('OPTIONS_UPDATED'));
         break;
       case 'get-options':
         sendResponse(options.options || {});

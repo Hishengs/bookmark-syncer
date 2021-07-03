@@ -33,5 +33,6 @@
     "notifications",
     "https://*.github.com/",
     "https://*.githubusercontent.com/"
-  ]
+  ],
+  "default_locale": "en"
 }

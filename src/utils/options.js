@@ -1,5 +1,5 @@
 import storage from './storage.js';
-import { NO_OPTIONS_MSG } from './constant.js';
+import * as i18n from './i18n.js';
 
 // const browser = chrome;
 const OPTIONS_NAME = 'options';
@@ -16,7 +16,7 @@ const OPTS = {
     }
     // browser.runtime.openOptionsPage();
     if (throwError) {
-      throw new Error(NO_OPTIONS_MSG);
+      throw new Error(i18n.get('NO_OPTIONS_MSG'));
     }
   },
   async update (options) {

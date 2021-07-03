@@ -4,6 +4,7 @@ import notification from './notification.js';
 import gist from './gist.js';
 import options from './options.js';
 import * as constant from './constant.js';
+import * as i18n from './i18n.js';
 
 export {
   storage,
@@ -11,5 +12,6 @@ export {
   notification,
   gist,
   options,
-  constant
+  constant,
+  i18n
 };
