@@ -9,3 +9,29 @@ A Chrome Extension for Bookmark Sync
 - no server, no worry about data security and privacy
 
 > [gists](https://gist.github.com/) is used to store your bookmarks data (private)
+
+## get started
+
+First of all, you should have a github account, which we use it to create a gist, to store your bookmarks.
+
+secondly, generate a github private access token:
+
+go to [https://github.com/settings/tokens](https://github.com/settings/tokens)
+
+click **Generate new token**
+
+![](./assets/img/generate.png)
+
+pick scope: gist
+
+![](./assets/img/scope.png)
+
+copy your access token like: "ghp_xxxxxxxxxxxxx"
+
+fill in the setting
+
+![](./assets/img/setting.png)
+
+and that is all, enjoy this tool
+
+![](./assets/img/popup.png)
