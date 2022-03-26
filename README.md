@@ -1,6 +1,8 @@
 # bookmark-syncer
 A Chrome Extension for Bookmark Sync. [中文文档](./README-CN.md)
 
+> 最新代码支持 chrome extension v3, v2 版本请查看 v2 分支，已不再维护
+
 ## features
 
 - sync bookmarks from remote (gists)
