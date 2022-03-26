@@ -12,6 +12,11 @@ A Chrome Extension for Bookmark Sync. [中文文档](./README-CN.md)
 
 > [gists](https://gist.github.com/) of Github / gists of [Gitee](https://gitee.com/) is used to store your bookmarks data (private)
 
+
+## install
+
+[Chrome Store](https://microsoftedge.microsoft.com/addons/detail/bookmark-syncer/pnhcpopelnamhdhkdccijehenbikojge) , [Edge Store](https://microsoftedge.microsoft.com/addons/detail/bookmark-syncer/pnhcpopelnamhdhkdccijehenbikojge)
+
 ## get started
 
 First of all, you should have a github account, which we use it to create a gist, to store your bookmarks.

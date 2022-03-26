@@ -1,6 +1,6 @@
 {
   "name": "bookmark-syncer",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Chrome Extension for Bookmark Sync",
   "main": "src/index.js",
   "scripts": {
@@ -10,7 +10,14 @@
     "type": "git",
     "url": "git+https://github.com/Hishengs/bookmark-syncer.git"
   },
-  "keywords": ["bookmark", "extension", "browser", "chrome", "firefox", "edge"],
+  "keywords": [
+    "bookmark",
+    "extension",
+    "browser",
+    "chrome",
+    "firefox",
+    "edge"
+  ],
   "author": "hishengs@gmail.com",
   "license": "ISC",
   "bugs": {

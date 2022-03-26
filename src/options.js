@@ -1,10 +1,6 @@
-import { seti18n } from './utils/i18n.js';
-
-const browser = chrome;
-
-function init () {
-  browser.runtime.sendMessage({ name: 'get-options' }, setOptions);
-}
+import options from './utils/options.js';
+import { showNotification } from './utils/notification.js';
+import { get as i18nGet, replace as i18nReplace } from './utils/i18n.js';
 
 function setOptions (options = {}) {
   const opts = Object.assign({}, options);
@@ -17,6 +13,11 @@ function setOptions (options = {}) {
     }
     input.value = opts[input.name] || '';
   });
+}
+
+async function updateOptions (opts) {
+  await options.update(opts);
+  showNotification(i18nGet('OPTIONS_UPDATED'));
 }
 
 function save () {
@@ -33,13 +34,11 @@ function save () {
     return acc;
   }, {});
   if (emptyField) {
-    browser.runtime.sendMessage({ name: 'show-msg', msg: `请检查你的输入项: ${emptyField}` });
+    window.alert(`${i18nGet('CHECK_INPUT')}: ${emptyField}`);
     return;
   }
-  browser.runtime.sendMessage({ name: 'update-options', options });
+  updateOptions(options);
 }
-
-init();
 
 window.addEventListener('click', e => {
   if (e.target && e.target.className === 'save-btn') {
@@ -47,4 +46,13 @@ window.addEventListener('click', e => {
   }
 });
 
-seti18n();
+i18nReplace();
+
+(async function () {
+  try {
+    await options.fetch();
+    setOptions(options.options);
+  } catch (e) {
+    window.alert(e.message);
+  }
+})();

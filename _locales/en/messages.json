@@ -60,7 +60,7 @@
     "description": ""
   },
   "clear_local": {
-    "message": "清空本地书签",
+    "message": "Clear local bookmarks",
     "description": ""
   },
   "clear_local_confirm": {
@@ -77,6 +77,10 @@
   },
   "remote_empty_confirm": {
     "message": "Remote bookmarks seems empty, still download and override local's?",
+    "description": ""
+  },
+  "CHECK_INPUT": {
+    "message": "Please check your input",
     "description": ""
   }
 }

@@ -1,6 +1,6 @@
 const browser = chrome;
 
-export function seti18n () {
+export function replace () {
   const els = document.querySelectorAll('[data-i18n]');
   Array.from(els).forEach(el => {
     el.innerText = browser.i18n.getMessage(el.getAttribute('data-i18n').replace(/-/g, '_'));
