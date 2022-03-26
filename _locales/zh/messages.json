@@ -78,5 +78,9 @@
   "remote_empty_confirm": {
     "message": "远端书签似乎为空？仍然下载并覆盖掉本地的书签吗？",
     "description": ""
+  },
+  "CHECK_INPUT": {
+    "message": "请检查你的输入",
+    "description": ""
   }
 }

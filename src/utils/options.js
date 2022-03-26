@@ -1,5 +1,5 @@
 import storage from './storage.js';
-import * as i18n from './i18n.js';
+import { get as i18nGet } from './i18n.js';
 
 // const browser = chrome;
 const OPTIONS_NAME = 'options';
@@ -7,7 +7,7 @@ const OPTIONS_NAME = 'options';
 const OPTS = {
   options: null,
   changeCbs: [],
-  async fetch (throwError = true) {
+  async fetch () {
     if (this.options) return this.options;
     let options = await storage.getItem(OPTIONS_NAME);
     if (options) {
@@ -16,9 +16,7 @@ const OPTS = {
       return this.options;
     }
     // browser.runtime.openOptionsPage();
-    if (throwError) {
-      throw new Error(i18n.get('NO_OPTIONS_MSG'));
-    }
+    throw new Error(i18nGet('NO_OPTIONS_MSG'));
   },
   async update (options) {
     if (!options) return;
