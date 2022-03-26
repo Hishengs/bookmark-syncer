@@ -1,0 +1,86 @@
+{
+  "GIST_NOT_FOUND": {
+    "message": "gistは存在しません",
+    "description": ""
+  },
+  "OPTIONS_UPDATED": {
+    "message": "構成が更新されました",
+    "description": ""
+  },
+  "NO_OPTIONS_MSG": {
+    "message": "設定なし、あなたの設定を更新してください",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_WRN": {
+    "message": "あなたのブックマークをリモート（ジスト）に同期させるのは確実ですが、完全に上書きされますか？",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_WRN": {
+    "message": "あなたのブックマークをリモート（git）から同期するのは確実ですが、地元の地元は完全に上書きされますか？",
+    "description": ""
+  },
+  "SYNC_FROM_REMOTE_SUCCESS": {
+    "message": "リモートブックマークはローカルにダウンロードされました",
+    "description": ""
+  },
+  "REMOTE_BOOKMARK_EMPTY_TIP": {
+    "message": "リモートブックマークはありません。ローカルブックマークを最初にリモートに同期してください",
+    "description": ""
+  },
+  "SYNC_TO_REMOTE_SUCCESS": {
+    "message": "地元のブックマークはリモートにアップロードされました",
+    "description": ""
+  },
+  "save": {
+    "message": "保存",
+    "description": ""
+  },
+  "sync_from_remote": {
+    "message": "リモートからの同期(from remote)",
+    "description": ""
+  },
+  "sync_to_remote": {
+    "message": "リモートへの同期(to remote)",
+    "description": ""
+  },
+  "setting": {
+    "message": "Setting",
+    "description": ""
+  },
+  "help": {
+    "message": "助けや好き",
+    "description": ""
+  },
+  "tip": {
+    "message": "ヒント",
+    "description": ""
+  },
+  "invalid_access_token": {
+    "message": "悪い資格情報、アクセストークンが無効です。設定を更新してください",
+    "description": ""
+  },
+  "clear_local": {
+    "message": "地元のブックマークをクリアします",
+    "description": ""
+  },
+  "clear_local_confirm": {
+    "message": "あなたはあなたの地元のブックマークを空にしたいと判断しますか？",
+    "description": ""
+  },
+  "clear_success": {
+    "message": "正常にクリアされました",
+    "description": ""
+  },
+  "local_empty_confirm": {
+    "message": "あなたの地元のブックマークは空のようです、まだアップロードして上書きしますか？",
+    "description": ""
+  },
+  "remote_empty_confirm": {
+    "message": "オンラインのブックマークは空のようです、まだローカルをダウンロードして上書きしますか？",
+    "description": ""
+  },
+  "CHECK_INPUT": {
+    "message": "入力を確認してください",
+    "description": ""
+  }
+}
