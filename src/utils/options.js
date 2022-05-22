@@ -1,10 +1,14 @@
 import storage from './storage.js';
 import { get as i18nGet } from './i18n.js';
+import { OPTIONS_NAME } from './constant.js';
 
-// const browser = chrome;
-const OPTIONS_NAME = 'options';
+const DEFAULT_OPTIONS = {
+  store: 'github', // gist store type, github / gitee
+  access_token: '', // access token of gist
+  syncFrequency: 5 * 60 * 1000, // 5min
+};
 
-const OPTS = {
+const optionsUtil = {
   options: null,
   changeCbs: [],
   async fetch () {
@@ -15,8 +19,12 @@ const OPTS = {
       this.options = options;
       return this.options;
     }
+    options = Object.assign({}, DEFAULT_OPTIONS);
+    // set default options if first time
+    await storage.setItem(OPTIONS_NAME, JSON.stringify(options));
+    return options;
     // browser.runtime.openOptionsPage();
-    throw new Error(i18nGet('NO_OPTIONS_MSG'));
+    // throw new Error(i18nGet('NO_OPTIONS_MSG'));
   },
   async update (options) {
     if (!options) return;
@@ -35,6 +43,6 @@ const OPTS = {
   }
 };
 
-OPTS.fetch().catch(err => {});
+optionsUtil.fetch().catch(err => {});
 
-export default OPTS;
+export default optionsUtil;

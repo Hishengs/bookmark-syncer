@@ -1,4 +1,4 @@
-import options from './options.js';
+import optionsUtil from './options.js';
 import { get as i18nGet } from './i18n.js';
 import { showNotification } from './notification.js';
 import { GITHUB_URL, GITEE_URL } from './constant.js';
@@ -12,7 +12,7 @@ const isInit = new Promise((r, j) => {
 
 async function init () {
   try {
-    const opts = await options.fetch();
+    const opts = await optionsUtil.fetch();
     store = opts.store;
     access_token = opts.access_token;
     resolve();
@@ -41,7 +41,7 @@ const handleResponse = response => {
   // check credentials first
   /* const res = response.json();
   if (res.data && res.data.message && res.data.message === 'Bad credentials') {
-    options.clear();
+    optionsUtil.clear();
     throwErr(new Error(i18nGet('invalid_access_token')));
   } */
   // check status

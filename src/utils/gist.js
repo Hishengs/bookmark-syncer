@@ -1,5 +1,5 @@
 import storage from './storage.js';
-import options from './options.js';
+import optionsUtil from './options.js';
 import $api, { isGithub } from './api.js';
 import { GIST_DESC, FILE_NAME } from './constant.js';
 
@@ -101,6 +101,6 @@ const Gist = {
   }
 };
 
-options.onChange(Gist.reset.bind(Gist));
+optionsUtil.onChange(Gist.reset.bind(Gist));
 
 export default Gist;

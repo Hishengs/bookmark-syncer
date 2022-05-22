@@ -1,4 +1,4 @@
-import options from './utils/options.js';
+import optionsUtil from './utils/options.js';
 import { showNotification } from './utils/notification.js';
 import { get as i18nGet, replace as i18nReplace } from './utils/i18n.js';
 
@@ -15,8 +15,8 @@ function setOptions (options = {}) {
   });
 }
 
-async function updateOptions (opts) {
-  await options.update(opts);
+async function updateOptions (options) {
+  await optionsUtil.update(options);
   showNotification(i18nGet('OPTIONS_UPDATED'));
 }
 
@@ -50,8 +50,8 @@ i18nReplace();
 
 (async function () {
   try {
-    await options.fetch();
-    setOptions(options.options);
+    await optionsUtil.fetch();
+    setOptions(optionsUtil.options);
   } catch (e) {
     window.alert(e.message);
   }
