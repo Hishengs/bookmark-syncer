@@ -19,10 +19,11 @@
     }
     label {
       display: inline-block;
-      width: 80px;
+      width: 90px;
       margin-right: 10px;
     }
-    input[type="text"] {
+    input[type="text"],
+    input[type="number"] {
       padding: 8px 10px;
       border: 1px solid #ccc;
       outline: none;
@@ -68,6 +69,9 @@
     </div>
     <div class="option">
       <label for="">Access Token</label><input type="text" name="access_token">
+    </div>
+    <div class="option">
+      <label for="">Sync Frequence(ms)</label><input type="number" min="60000" name="sync_frequency">
     </div>
     <div class="save-btn">
       <img src="../assets/img/save.svg" alt="">

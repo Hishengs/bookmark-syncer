@@ -16,6 +16,37 @@ class BookmarkManager {
     return await gist.fetch();
   }
 
+  // TODO: works to be continued...
+  async autoSyncBookmark () {
+    const local = await this.getLocalBookmark();
+    const remote = await this.getRemoteBookmark();
+    // const isGroup = node => !!node.children;
+    function diffNodes (localNodes, remoteNodes, localParent, remoteParent) {
+      let i = 0, total = remoteNodes.length > localNodes.length ? remoteNodes.length : localNodes.length;
+      while (i < total) {
+        let local = localNodes[i];
+        let remote = remoteNodes[i];
+        if (local && remote) {
+          // const isRemoteNewer = remote.
+        } else if (local & !remote) {
+          // if remote newer than local
+          if (localParent && remoteParent && remoteParent.dateGroupModified > localParent.dateGroupModified) {
+            // remove local
+            delete localNodes[i];
+          }
+        } else if (!local & remote) {
+          // if remote newer than local
+          if (localParent && remoteParent && remoteParent.dateGroupModified > localParent.dateGroupModified) {
+            // add local
+            localNodes[i] = remote;
+          }
+        }
+        i--;
+      }
+    }
+    diffNodes(local.bookmarks, remote.bookmarks);
+  }
+
   // local => remote
   async updateRemoteBookmark (bookmarks) {
     await gist.update(JSON.stringify(bookmarks, null, 2));

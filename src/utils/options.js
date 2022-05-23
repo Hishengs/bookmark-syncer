@@ -5,7 +5,7 @@ import { OPTIONS_NAME } from './constant.js';
 const DEFAULT_OPTIONS = {
   store: 'github', // gist store type, github / gitee
   access_token: '', // access token of gist
-  syncFrequency: 5 * 60 * 1000, // 5min
+  sync_frequency: 5 * 60 * 1000, // 5min
 };
 
 const optionsUtil = {
@@ -16,7 +16,7 @@ const optionsUtil = {
     let options = await storage.getItem(OPTIONS_NAME);
     if (options) {
       options = JSON.parse(options);
-      this.options = options;
+      this.options = Object.assign({}, DEFAULT_OPTIONS, options);
       return this.options;
     }
     options = Object.assign({}, DEFAULT_OPTIONS);
